@@ -20,6 +20,7 @@ const RoomForm = ({ userId, hideRoomForm }: RoomFormProps) => {
             lastUpdatedAt: Date.now(),
             creatorId: userId,
         });
+        hideRoomForm();
     };
 
     return (
