@@ -23,14 +23,19 @@ const MessageForm = ({ id, isAuth, userId }: MessageFormProps) => {
     };
 
     return (
-        <div>
+        <div className="w-full flex gap-4 my-4">
             <input
+                className="w-full outline-none resize-none rounded-md px-4 py-2 disabled:bg-gray-500 text-black disabled:text-gray-400 disabled:border disabled:border-gray-400"
                 name="message"
                 value={isAuth ? message : 'Please sign in to participate.'}
                 onChange={handleOnChange}
                 disabled={!isAuth}
             />
-            <button onClick={handleOnSubmit} disabled={!isAuth || message.length < 1}>
+            <button
+                className="px-4 rounded-md bg-violet-600 hover:bg-violet-800 disabled:bg-violet-400"
+                onClick={handleOnSubmit}
+                disabled={!isAuth || message.length < 1}
+            >
                 Send
             </button>
         </div>

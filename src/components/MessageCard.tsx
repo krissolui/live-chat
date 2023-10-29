@@ -1,16 +1,23 @@
 import React from 'react';
-import { Message } from '@/types/message';
+import { MessageDetails } from '@/types/message';
 
 interface MessageCardProps {
-    msg: Message;
+    msg: MessageDetails;
+    isCurrentUser: boolean;
 }
 
-const MessageCard = ({ msg }: MessageCardProps) => {
-    const { message, createdAt } = msg;
+const MessageCard = ({ msg, isCurrentUser }: MessageCardProps) => {
+    const { message, creatorName, createdAt } = msg;
     return (
-        <div>
-            <div>{message}</div>
-            <div>{new Date(createdAt).toLocaleString()}</div>
+        <div
+            className={`${isCurrentUser ? 'bg-violet-600' : 'bg-gray-800'} w-full sm:w-3/5 px-4 py-2 ${
+                isCurrentUser && 'ml-auto'
+            } rounded-lg`}
+        >
+            <div className={isCurrentUser ? 'text-gray-400' : 'text-gray-500'}>
+                {<span className="font-medium">{creatorName}</span>} - {new Date(createdAt).toLocaleString()}
+            </div>
+            <div>&gt; {message}</div>
         </div>
     );
 };

@@ -1,13 +1,15 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { getCurrentUser, listenAuth } from '@/firebase/auth';
 import { getRoomById } from '@/firebase/rooms';
 import { getMessages, listenMessages } from '@/firebase/messages';
 import MessageForm from '@/components/MessageForm';
 import { Room } from '@/types/room';
-import { Message } from '@/types/message';
+import { Message, MessageDetails } from '@/types/message';
 import MessageList from '@/components/MessageList';
+import { UserProfile } from '@/types/user';
+import { getUsers, listenUsers } from '@/firebase/users';
 
 interface Params {
     id: string;
@@ -22,6 +24,7 @@ const Room = ({ params }: RoomProps) => {
     const [room, setRoom] = useState<Room | null>(null);
     const [userId, setUserId] = useState<string>(getCurrentUser()?.uid ?? '');
     const [messages, setMessages] = useState<Message[]>([]);
+    const [users, setUsers] = useState<UserProfile[]>([]);
 
     useEffect(() => {
         const fetch = async () => {
@@ -30,7 +33,7 @@ const Room = ({ params }: RoomProps) => {
             setIsLoading(false);
         };
         fetch();
-    });
+    }, [params.id]);
 
     useEffect(() => {
         listenAuth((userId: string) => setUserId(userId));
@@ -40,24 +43,39 @@ const Room = ({ params }: RoomProps) => {
         if (!room) return;
 
         const fetch = async () => {
-            const messagesFromStore = await getMessages(room.id);
-            setMessages(messagesFromStore);
+            setMessages(await getMessages(room.id));
+            setUsers(await getUsers());
+
             listenMessages(room.id, (messages: Message[]) => setMessages(messages));
+            listenUsers((users: UserProfile[]) => setUsers(users));
         };
         fetch();
     }, [room]);
+
+    const userIdMapToName = useMemo(() => {
+        return new Map<string, string>(users.map(({ id, name }) => [id, name]));
+    }, [users]);
+
+    const messageDetails: MessageDetails[] = useMemo(() => {
+        return messages.map((msg) => ({
+            ...msg,
+            creatorName: userIdMapToName.get(msg.creatorId) ?? 'Unknown User',
+        }));
+    }, [messages, userIdMapToName]);
 
     if (isLoading) return <div>Loading...</div>;
     if (!room) return <div>Room not found</div>;
 
     return (
-        <div>
-            <div>{room.name}</div>
-            <div>Created in {new Date(room.createdAt).toLocaleString()}</div>
-            <div>Last updated at {new Date(room.lastUpdatedAt).toLocaleString()}</div>
-            <MessageList messages={messages} />
+        <main className="h-full flex flex-col px-7 gap-6">
+            <div>
+                <h2 className="text-2xl font-bold my-4">{room.name}</h2>
+                <div className="text-gray-500">Created at {new Date(room.createdAt).toLocaleString()}</div>
+                <div className="text-gray-500">Last updated at {new Date(room.lastUpdatedAt).toLocaleString()}</div>
+            </div>
+            <MessageList messages={messageDetails} userId={userId} />
             <MessageForm id={room.id} isAuth={userId !== ''} userId={userId} />
-        </div>
+        </main>
     );
 };
 

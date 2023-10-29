@@ -26,8 +26,7 @@ export default function Home() {
     }, []);
 
     return (
-        <main className="">
-            Live Chat
+        <main className="flex flex-col lg:flex-row px-7 gap-6">
             <RoomList rooms={rooms} />
             <UserList users={users} />
         </main>

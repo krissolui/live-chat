@@ -31,12 +31,26 @@ const Header = () => {
     const handleToggleShowRoomForm = () => setShowRoomForm(!showRoomForm);
 
     return (
-        <div>
-            <Link href="/">Rooms</Link>
-            {isAuth && <button onClick={handleToggleShowRoomForm}>Create Room</button>}
-            {isAuth ? <button onClick={signOutFromGoogle}>Sign out</button> : <button onClick={signIn}>Sign in</button>}
-            {showRoomForm && <RoomForm userId={userId} />}
-        </div>
+        <nav className="w-full flex justify-between p-4 mb-2 border-b border-violet-600 text-violet-600 font-semibold text-lg">
+            <Link className="hover:text-violet-800" href="/">
+                Rooms
+            </Link>
+            {isAuth && (
+                <button className="hover:text-violet-800" onClick={handleToggleShowRoomForm}>
+                    Create Room
+                </button>
+            )}
+            {isAuth ? (
+                <button className="hover:text-violet-800" onClick={signOutFromGoogle}>
+                    Sign out
+                </button>
+            ) : (
+                <button className="hover:text-violet-800" onClick={signIn}>
+                    Sign in
+                </button>
+            )}
+            {showRoomForm && <RoomForm userId={userId} hideRoomForm={handleToggleShowRoomForm} />}
+        </nav>
     );
 };
 

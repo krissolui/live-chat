@@ -1,16 +1,17 @@
 import React from 'react';
-import { Message } from '@/types/message';
+import { MessageDetails } from '@/types/message';
 import MessageCard from './MessageCard';
 
 interface MessageListProps {
-    messages: Message[];
+    messages: MessageDetails[];
+    userId: string;
 }
 
-const MessageList = ({ messages }: MessageListProps) => {
+const MessageList = ({ messages, userId }: MessageListProps) => {
     return (
-        <div>
+        <div className="flex flex-col gap-4">
             {messages.map((message) => (
-                <MessageCard key={message.id} msg={message} />
+                <MessageCard key={message.id} msg={message} isCurrentUser={message.creatorId === userId} />
             ))}
         </div>
     );

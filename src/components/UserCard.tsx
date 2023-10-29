@@ -5,13 +5,13 @@ interface UserCardProps {
     user: UserProfile;
 }
 const UserCard = ({ user }: UserCardProps) => {
-    const { id, name, email, createdAt } = user;
+    const { name, email, createdAt } = user;
 
     return (
         <div>
-            <div>{name}</div>
+            <h3 className="text-lg font-medium">{name}</h3>
             <div>{email}</div>
-            <div>Joined: {new Date(createdAt).toLocaleDateString()}</div>
+            <div className="text-gray-500">Joined: {new Date(createdAt).toLocaleDateString()}</div>
         </div>
     );
 };
