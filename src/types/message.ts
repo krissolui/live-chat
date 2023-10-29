@@ -8,3 +8,7 @@ export type MessageInfo = {
 export type Message = MessageInfo & {
     id: string;
 };
+
+export type MessageDetails = Message & {
+    creatorName: string;
+};
