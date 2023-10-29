@@ -2,14 +2,15 @@
 
 import React, { useEffect, useMemo, useState } from 'react';
 import { getCurrentUser, listenAuth } from '@/firebase/auth';
+import { getUsers, listenUsers } from '@/firebase/users';
 import { getRoomById } from '@/firebase/rooms';
 import { getMessages, listenMessages } from '@/firebase/messages';
 import MessageForm from '@/components/MessageForm';
 import { Room } from '@/types/room';
 import { Message, MessageDetails } from '@/types/message';
 import MessageList from '@/components/MessageList';
+import HelperMessage from '@/components/HelperMessage';
 import { UserProfile } from '@/types/user';
-import { getUsers, listenUsers } from '@/firebase/users';
 
 interface Params {
     id: string;
@@ -63,8 +64,8 @@ const Room = ({ params }: RoomProps) => {
         }));
     }, [messages, userIdMapToName]);
 
-    if (isLoading) return <div>Loading...</div>;
-    if (!room) return <div>Room not found</div>;
+    if (isLoading) return <HelperMessage message="Loading..." />;
+    if (!room) return <HelperMessage message="Room not found..." />;
 
     return (
         <main className="h-full flex flex-col px-7 gap-6">
