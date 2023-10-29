@@ -25,10 +25,10 @@ export const sendMessage = async (message: Omit<MessageInfo, 'createdAt'>) => {
             ...message,
             createdAt: now,
         });
-        console.log('Document written with ID: ', docRef.id);
+        console.log('send message success');
         await updateRoomLastUpdatedAt(message.roomId, now);
     } catch (err) {
-        console.error('create message error', err);
+        console.error('send message error', err);
     }
 };
 

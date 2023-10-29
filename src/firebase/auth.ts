@@ -10,7 +10,7 @@ export const getCurrentUser = () => auth.currentUser;
 export const signInWithGoogle = async (): Promise<User | null> => {
     try {
         const result = await signInWithPopup(auth, provider);
-        console.log('auth result', result);
+        console.log('auth success');
         return result.user;
     } catch (err) {
         console.error('auth error', err);

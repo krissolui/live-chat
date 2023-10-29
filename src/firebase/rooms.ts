@@ -10,7 +10,7 @@ const roomCollection = collection(db, ROOM_COLLECTION).withConverter(converter<R
 export const createRoom = async (room: RoomInfo) => {
     try {
         const docRef = await addDoc(roomCollection, room);
-        console.log('Document written with ID: ', docRef.id);
+        console.log('create room success');
     } catch (err) {
         console.error('create room error', err);
     }
