@@ -19,10 +19,12 @@ export const createRoom = async (room: RoomInfo) => {
 export const getRooms = async (): Promise<Room[]> => {
     try {
         const querySnapshot = await getDocs(roomCollection);
-        return querySnapshot.docs.map((doc) => {
-            const data = doc.data();
-            return { ...data, id: doc.id };
-        });
+        return querySnapshot.docs
+            .map((doc) => {
+                const data = doc.data();
+                return { ...data, id: doc.id };
+            })
+            .sort((a, b) => b.createdAt - a.createdAt);
     } catch (err) {
         console.error('get rooms error', err);
         return [];

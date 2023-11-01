@@ -36,10 +36,12 @@ export const getMessages = async (roomId: string): Promise<Message[]> => {
     try {
         const q = query(messageCollection, where('roomId', '==', roomId), orderBy('createdAt', 'desc'));
         const querySnapshot = await getDocs(q);
-        return querySnapshot.docs.map((doc) => {
-            const data = doc.data();
-            return { ...data, id: doc.id };
-        });
+        return querySnapshot.docs
+            .map((doc) => {
+                const data = doc.data();
+                return { ...data, id: doc.id };
+            })
+            .sort((a, b) => a.createdAt - b.createdAt);
     } catch (err) {
         console.error('get messages error', err);
         return [];
@@ -54,7 +56,6 @@ export const listenMessages = (roomId: string, callback: (messages: Message[]) =
             const data = doc.data();
             return { ...data, id: doc.id };
         });
-
         callback(messages);
     });
 };

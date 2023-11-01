@@ -21,9 +21,11 @@ export const createUserProfile = async (user: UserProfile): Promise<void> => {
 export const getUsers = async (): Promise<UserProfile[]> => {
     try {
         const querySnapshot = await getDocs(userCollection);
-        return querySnapshot.docs.map((doc) => {
-            return doc.data();
-        });
+        return querySnapshot.docs
+            .map((doc) => {
+                return doc.data();
+            })
+            .sort((a, b) => b.createdAt - a.createdAt);
     } catch (err) {
         console.error('get users error', err);
         return [];
