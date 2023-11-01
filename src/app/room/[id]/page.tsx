@@ -58,10 +58,12 @@ const Room = ({ params }: RoomProps) => {
     }, [users]);
 
     const messageDetails: MessageDetails[] = useMemo(() => {
-        return messages.map((msg) => ({
-            ...msg,
-            creatorName: userIdMapToName.get(msg.creatorId) ?? 'Unknown User',
-        }));
+        return messages
+            .map((msg) => ({
+                ...msg,
+                creatorName: userIdMapToName.get(msg.creatorId) ?? 'Unknown User',
+            }))
+            .sort((a, b) => a.createdAt - b.createdAt);
     }, [messages, userIdMapToName]);
 
     if (isLoading) return <HelperMessage message="Loading..." />;
