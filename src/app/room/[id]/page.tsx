@@ -44,7 +44,9 @@ const Room = ({ params }: RoomProps) => {
         if (!room) return;
 
         const fetch = async () => {
-            setMessages(await getMessages(room.id));
+            const msgs = await getMessages(room.id);
+            console.log(msgs);
+            setMessages(msgs);
             setUsers(await getUsers());
 
             listenMessages(room.id, (messages: Message[]) => setMessages(messages));
@@ -58,15 +60,18 @@ const Room = ({ params }: RoomProps) => {
     }, [users]);
 
     const messageDetails: MessageDetails[] = useMemo(() => {
-        return messages.map((msg) => ({
-            ...msg,
-            creatorName: userIdMapToName.get(msg.creatorId) ?? 'Unknown User',
-        }));
+        return messages
+            .map((msg) => ({
+                ...msg,
+                creatorName: userIdMapToName.get(msg.creatorId) ?? 'Unknown User',
+            }))
+            .sort((a, b) => a.createdAt - b.createdAt);
     }, [messages, userIdMapToName]);
 
     if (isLoading) return <HelperMessage message="Loading..." />;
     if (!room) return <HelperMessage message="Room not found..." />;
 
+    console.log({ messageDetails });
     return (
         <main className="h-full flex flex-col px-7 gap-6">
             <div>
