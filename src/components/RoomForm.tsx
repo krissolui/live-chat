@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { createRoom } from '@/firebase/rooms';
+import toast from 'react-hot-toast';
 
 interface RoomFormProps {
     userId: string;
@@ -21,6 +22,10 @@ const RoomForm = ({ userId, hideRoomForm }: RoomFormProps) => {
             creatorId: userId,
         });
         hideRoomForm();
+        toast.success(`You've done it! Start discussing on ${name}.`, {
+            duration: 4000,
+            position: 'top-right',
+        });
     };
 
     return (
